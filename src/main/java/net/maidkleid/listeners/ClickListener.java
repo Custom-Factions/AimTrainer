@@ -2,6 +2,7 @@ package net.maidkleid.listeners;
 
 import net.kyori.adventure.text.event.ClickEvent;
 import net.maidkleid.AimTrainerMain;
+import net.maidkleid.utils.Executer;
 import net.maidkleid.utils.Items;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,16 +36,21 @@ public class ClickListener implements Listener {
 
         Inventory inv = inventorys.getStartInventory();
 
+        Executer executer = joinItems.getExecuter(event.getItem());
 
+        if (executer == null){
+            return;
+        }
+        executer.execute(player);
 
 
         //if (event.getItem().getItemMeta().getPersistentDataContainer().has(joinItems.joinItems));
 
-        if (Objects.equals(event.getItem(), joinItems.getJoinPaper())) {
+        /*if (Objects.equals(event.getItem(), joinItems.getJoinPaper())) {
             player.openInventory(inv);
             event.setCancelled(true);
 
-        }
+        }*/
 
 
 

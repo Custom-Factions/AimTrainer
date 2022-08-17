@@ -3,6 +3,7 @@ package net.maidkleid;
 import net.maidkleid.commands.TeleportSpawnCommand;
 import net.maidkleid.listeners.ClickListener;
 import net.maidkleid.listeners.ConnectionListener;
+import net.maidkleid.listeners.InventoryClickListener;
 import net.maidkleid.utils.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -12,15 +13,14 @@ public final class AimTrainerMain extends JavaPlugin {
 
 
 
-    private Items joinItems;
-    private Items inventories;
+    private Items configUtils;
+
 
 
     @Override
     public void onEnable() {
 
-        joinItems = new Items(this);
-        inventories = new Items(this);
+        configUtils = new Items(this);
 
 
 
@@ -31,14 +31,12 @@ public final class AimTrainerMain extends JavaPlugin {
         //listeners
         Bukkit.getPluginManager().registerEvents(new ConnectionListener(this), this);
         Bukkit.getPluginManager().registerEvents(new ClickListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new InventoryClickListener(this), this);
 
     }
 
     public Items getJoinItems() {
-        return joinItems;
+        return configUtils;
     }
 
-    public Items getInventories() {
-        return inventories;
-    }
 }
