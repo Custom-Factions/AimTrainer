@@ -1,21 +1,13 @@
 package net.maidkleid.listeners;
 
-import net.kyori.adventure.text.event.ClickEvent;
 import net.maidkleid.AimTrainerMain;
 import net.maidkleid.utils.Executer;
-import net.maidkleid.utils.Items;
+import net.maidkleid.utils.UtilConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.persistence.PersistentDataType;
-
-
-import java.net.http.WebSocket;
-import java.util.List;
-import java.util.Objects;
 
 public class ClickListener implements Listener {
 
@@ -29,14 +21,14 @@ public class ClickListener implements Listener {
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
-        Items joinItems = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
+        UtilConfig joinUtilConfig = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
         Player player = event.getPlayer();
 
-        Items inventorys = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
+        UtilConfig inventorys = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
 
         Inventory inv = inventorys.getStartInventory();
 
-        Executer executer = joinItems.getExecuter(event.getItem());
+        Executer executer = joinUtilConfig.getExecuter(event.getItem());
 
         if (executer == null){
             return;

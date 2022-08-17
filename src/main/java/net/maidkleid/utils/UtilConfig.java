@@ -4,17 +4,16 @@ import net.maidkleid.AimTrainerMain;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.Vector;
 
-public class Items {
+public class UtilConfig {
 
     private final HashMap<ItemStack, Executer> executerMap = new HashMap<>();
     private final HashMap<ItemStack, Executer> executerMapInv = new HashMap<>();
@@ -28,10 +27,11 @@ public class Items {
 
 
 
+
     private final Inventory startInventory;
 
 
-    public Items(AimTrainerMain main) {
+    public UtilConfig(AimTrainerMain main) {
         this.main = main;
 
         joinItems = new NamespacedKey(main, "join.item");
@@ -122,7 +122,6 @@ public class Items {
     public Executer getExecuter(ItemStack stack) {
         return executerMap.get(stack);
     }
-
 
     public Executer getExecuterInv(ItemStack stack) {
         return executerMapInv.get(stack);

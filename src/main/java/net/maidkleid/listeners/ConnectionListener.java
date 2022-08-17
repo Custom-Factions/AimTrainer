@@ -1,8 +1,7 @@
 package net.maidkleid.listeners;
 
 import net.maidkleid.AimTrainerMain;
-import net.maidkleid.utils.Items;
-import org.bukkit.Material;
+import net.maidkleid.utils.UtilConfig;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,10 +20,10 @@ public class ConnectionListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 
-        Items joinItems = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
+        UtilConfig joinUtilConfig = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
 
 
-        ItemStack joinPaper = joinItems.getJoinPaper();
+        ItemStack joinPaper = joinUtilConfig.getJoinPaper();
 
 
         Player player = event.getPlayer();
