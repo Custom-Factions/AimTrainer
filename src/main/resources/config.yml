@@ -1,0 +1,52 @@
+arenas:
+  arena1:
+    world: "world"
+    spawnlocation:
+      x: 100
+      y: 70
+      z: 100
+      yaw: 0
+      pitch: 0
+    locationA:
+      x: 98
+      y: 70
+      z: 95
+    locationB:
+      x: 120
+      y: 70
+      z: 105
+  arena2:
+    world: "world"
+    spawnlocation:
+      x: 100
+      y: 70
+      z: 100
+      yaw: 0
+      pitch: 0
+    locationA:
+      x: 98
+      y: 70
+      z: 95
+    locationB:
+      x: 120
+      y: 70
+      z: 105
+  arena3:
+    world: "world"
+    spawnlocation:
+      x: 100
+      y: 70
+      z: 100
+      yaw: 0
+      pitch: 0
+    locationA:
+      x: 98
+      y: 70
+      z: 95
+    locationB:
+      x: 120
+      y: 70
+      z: 105
+
+
+

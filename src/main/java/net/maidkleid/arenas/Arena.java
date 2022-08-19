@@ -2,17 +2,19 @@ package net.maidkleid.arenas;
 
 import net.maidkleid.utils.Variablen;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class Arena {
 
-    private final Player player;
+    private Player player;
+    private final String name;
     private final Location spawnLocation;
     private final Location boxLocation;
     private final Location boxLocationTwo;
 
-    public Arena(Player player, Location spawnLocation, Location boxLocationOne, Location boxLocationTwo){
-        this.player = player;
+    public Arena(String name, Location spawnLocation, Location boxLocationOne, Location boxLocationTwo){
+        this.name = name;
         this.spawnLocation = spawnLocation;
         this.boxLocation = boxLocationOne;
         this.boxLocationTwo = boxLocationTwo;

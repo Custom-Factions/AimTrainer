@@ -4,8 +4,10 @@ import net.maidkleid.commands.TeleportSpawnCommand;
 import net.maidkleid.listeners.ClickListener;
 import net.maidkleid.listeners.ConnectionListener;
 import net.maidkleid.listeners.InventoryClickListener;
+import net.maidkleid.utils.ArenaHandler;
 import net.maidkleid.utils.UtilConfig;
 import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AimTrainerMain extends JavaPlugin {
@@ -13,18 +15,24 @@ public final class AimTrainerMain extends JavaPlugin {
 
 
     private UtilConfig configUtils;
+    private ArenaHandler arenaHandler;
 
 
 
     @Override
     public void onEnable() {
 
+        ArenaHandler arenaHandler = new ArenaHandler(this, getConfig());
+
+        getConfig().options().copyDefaults();
+        saveDefaultConfig();
+
         configUtils = new UtilConfig(this);
 
 
 
         //commands
-        getCommand("aimtrainer").setExecutor(new TeleportSpawnCommand());
+        getCommand("aimtrainer").setExecutor(new TeleportSpawnCommand(this));
 
 
         //listeners
@@ -38,4 +46,8 @@ public final class AimTrainerMain extends JavaPlugin {
         return configUtils;
     }
 
+
+    public ArenaHandler getArenaHandler() {
+        return arenaHandler;
+    }
 }
