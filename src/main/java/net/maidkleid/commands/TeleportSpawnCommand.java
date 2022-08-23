@@ -1,5 +1,6 @@
 package net.maidkleid.commands;
 
+import net.maidkleid.AimTrainerMain;
 import net.maidkleid.arenas.Arena;
 import net.maidkleid.utils.Variablen;
 import org.bukkit.Location;
@@ -10,12 +11,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 public class TeleportSpawnCommand implements CommandExecutor {
+
+    AimTrainerMain main;
+
+    public TeleportSpawnCommand(AimTrainerMain main) {
+        this.main = main;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+
+
+
+
+
         if(!(sender instanceof Player player)){
+
             sender.sendMessage(Variablen.onlyPlayer);
             return false;
         }
@@ -26,16 +41,13 @@ public class TeleportSpawnCommand implements CommandExecutor {
         }
 
 
-        World worldSpawn = player.getWorld();
-
-        Location spawnLocation = new Location(worldSpawn, 100, 70 , 100, player.getLocation().getYaw(), player.getLocation().getPitch());
-        Location boxOneLocation = new Location(worldSpawn, 98, 70, 95);
-        Location boxTwoLocation = new Location(worldSpawn, 120, 70, 105);
 
 
-        Arena arenaOne = new Arena(player, spawnLocation, boxOneLocation, boxTwoLocation);
 
-        arenaOne.init();
+
+
+
+
 
         return false;
     }

@@ -44,10 +44,10 @@ public class UtilConfig {
         startInventory = Bukkit.createInventory(null, InventoryType.CHEST, "Start-Inventory");
 
         startButton.editMeta(itemMeta -> {
-           itemMeta.setDisplayName("Start-Button");
+           itemMeta.setDisplayName("§2Start-Button");
         });
         endButton.editMeta(itemMeta -> {
-           itemMeta.setDisplayName("End-Button");
+           itemMeta.setDisplayName("§4End-Button");
         });
 
         startInventory.setItem(10, startButton);
@@ -67,34 +67,41 @@ public class UtilConfig {
         });
 
         executerMapInv.put(startButton, (player) -> {
-            player.sendMessage("Test start");
+            //player.sendMessage("Test start");
 
             Long startTime = startTimeMap.get(player.getUniqueId());
             Long currentTime = System.currentTimeMillis();
 
             if (startTime == null) {
-                player.sendMessage("Die Zeit wurde gestartet!");
+                player.sendMessage("§6Die Zeit wurde §agestartet!");
+                main.getArenaHandler().joinArena(player);
                 startTimeMap.put(player.getUniqueId(), currentTime);
             } else {
-                player.sendMessage("Die Zeit läuft bereits!");
+                player.sendMessage("§9Die Zeit läuft bereits!");
             }
 
             return true;
         });
 
         executerMapInv.put(endButton, (player) -> {
-            player.sendMessage("Test End!");
+            //player.sendMessage("Test End!");
+
+            if (startTimeMap.containsKey(player.getUniqueId())) {
+                main.getArenaHandler().leaveArena(player);
+            }
+
 
             Long startTime = startTimeMap.get(player.getUniqueId());
             Long currentTime = System.currentTimeMillis();
 
+
             if (startTime != null) {
-                player.sendMessage("Die Zeit wurde gestoppt!");
+                player.sendMessage("§6Die Zeit wurde §4gestoppt!");
                 long duration = currentTime - startTimeMap.get(player.getUniqueId());
-                player.sendMessage("Die Runde hat " + duration/1000 + " sekunden gedauert!");
+                player.sendMessage("§6Die Runde hat§6 " + duration/1000 + " §6sekunden gedauert!");
                 startTimeMap.remove(player.getUniqueId());
             } else {
-                player.sendMessage("Die Zeit läuft gar nicht!");
+                player.sendMessage("§3Die Zeit läuft gar nicht!");
             }
 
             return true;

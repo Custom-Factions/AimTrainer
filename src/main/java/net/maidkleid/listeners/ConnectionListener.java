@@ -28,12 +28,12 @@ public class ConnectionListener implements Listener {
 
         Player player = event.getPlayer();
         player.getInventory().setItem(4, joinPaper);
-        event.setJoinMessage("§7[§c-§7]" + player.getName() + "hat den Server betreten!");
+        event.setJoinMessage("§7[§c-§7] " + player.getName() + " hat den Server betreten!");
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        event.setQuitMessage("§7[§c-§7]" + player.getName() + "hat den Server verlassen!");
+        event.setQuitMessage("§7[§c-§7] " + player.getName() + " hat den Server verlassen!");
     }
 }
