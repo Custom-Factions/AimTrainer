@@ -1,4 +1,4 @@
-package net.maidkleid.utils;
+package net.maidkleid.arenas;
 
 import it.unimi.dsi.fastutil.Hash;
 import net.maidkleid.AimTrainerMain;
@@ -70,8 +70,8 @@ public class ArenaHandler {
 
 
     public @Nullable Arena joinArena(Player player) {
-        if(freeArenas.isEmpty()) return null;
-        player.sendMessage("Du gejoint seien tust!");
+        if (freeArenas.isEmpty()) return null;
+        player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
         player.sendMessage(player.getName());
         Arena arena = freeArenas.get(0);
         freeArenas.remove(0);
@@ -81,9 +81,9 @@ public class ArenaHandler {
     }
 
     public @Nullable Arena leaveArena(Player player) {
-        player.sendMessage("Es worked du verlassen hast!");
+        player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!");
         Arena arena = playerArenaHandler.get(player.getUniqueId());
-        if(arena == null) return null;
+        if (arena == null) return null;
         arena.unInit();
         freeArenas.add(arena);
         playerArenaHandler.remove(player.getUniqueId(), arena);

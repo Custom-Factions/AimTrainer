@@ -31,20 +31,15 @@ public class Arena {
     }
 
     public void init(Player player){
-
         oldLocation = player.getLocation();
 
         this.player = player;
-
         this.player.teleport(spawnLocation);
         this.player.sendMessage(Variablen.teleport);
-
     }
 
     public void unInit() {
-        player.sendMessage("Java ist gut für die Menscheheit!");
         player.teleport(oldLocation);
-
     }
 
     public Player getPlayer() {
