@@ -1,5 +1,6 @@
 package net.maidkleid.utils;
 
+import it.unimi.dsi.fastutil.Hash;
 import net.maidkleid.AimTrainerMain;
 import net.maidkleid.arenas.Arena;
 import org.bukkit.Bukkit;
@@ -8,16 +9,22 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class ArenaHandler {
 
+    private final HashMap<UUID, Arena> playerArenaHandler = new HashMap<>();
+    private final ArrayList<Arena> freeArenas = new ArrayList<>();
+
+
+
     AimTrainerMain main;
 
-    public ArenaHandler() {
 
-    }
 
     ArrayList<Arena> arenaList = new ArrayList<>();
 
@@ -26,6 +33,8 @@ public class ArenaHandler {
 
     public ArenaHandler(AimTrainerMain main, FileConfiguration config) {
         this.main = main;
+
+
         ConfigurationSection arenas = config.getConfigurationSection("arenas");
         arenas.getKeys(false).forEach(s -> {
             ConfigurationSection arena = arenas.getConfigurationSection(s);
@@ -35,10 +44,12 @@ public class ArenaHandler {
             Location locationB = locationFromConfigSection(arena.getConfigurationSection("locationB"), world);
 
 
-            arenaList.add(new Arena(s, spawnLocation, locationA, locationB));
+            Arena arena1 = new Arena(main, s, spawnLocation, locationA, locationB);
+
+            arenaList.add(arena1);
         });
 
-
+        freeArenas.addAll(arenaList);
     }
 
     private Location locationFromConfigSection(ConfigurationSection section, World world) {
@@ -53,6 +64,32 @@ public class ArenaHandler {
 
     }
 
+
+
+
+
+
+    public @Nullable Arena joinArena(Player player) {
+        if(freeArenas.isEmpty()) return null;
+        player.sendMessage("Du gejoint seien tust!");
+        player.sendMessage(player.getName());
+        Arena arena = freeArenas.get(0);
+        freeArenas.remove(0);
+        playerArenaHandler.put(player.getUniqueId(), arena);
+        arena.init(player);
+        return arena;
+    }
+
+    public @Nullable Arena leaveArena(Player player) {
+        player.sendMessage("Es worked du verlassen hast!");
+        Arena arena = playerArenaHandler.get(player.getUniqueId());
+        if(arena == null) return null;
+        arena.unInit();
+        freeArenas.add(arena);
+        playerArenaHandler.remove(player.getUniqueId(), arena);
+
+        return arena;
+    }
 
 
 

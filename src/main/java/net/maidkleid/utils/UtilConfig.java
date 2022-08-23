@@ -74,6 +74,7 @@ public class UtilConfig {
 
             if (startTime == null) {
                 player.sendMessage("Die Zeit wurde gestartet!");
+                main.getArenaHandler().joinArena(player);
                 startTimeMap.put(player.getUniqueId(), currentTime);
             } else {
                 player.sendMessage("Die Zeit läuft bereits!");
@@ -84,7 +85,7 @@ public class UtilConfig {
 
         executerMapInv.put(endButton, (player) -> {
             player.sendMessage("Test End!");
-
+            main.getArenaHandler().leaveArena(player);
             Long startTime = startTimeMap.get(player.getUniqueId());
             Long currentTime = System.currentTimeMillis();
 

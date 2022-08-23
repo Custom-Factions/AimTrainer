@@ -19,15 +19,17 @@ public final class AimTrainerMain extends JavaPlugin {
 
 
 
+
     @Override
     public void onEnable() {
 
-        ArenaHandler arenaHandler = new ArenaHandler(this, getConfig());
 
         getConfig().options().copyDefaults();
         saveDefaultConfig();
 
         configUtils = new UtilConfig(this);
+
+        arenaHandler = new ArenaHandler(this, getConfig());
 
 
 

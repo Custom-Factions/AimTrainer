@@ -45,7 +45,6 @@ public class TeleportSpawnCommand implements CommandExecutor {
 
 
 
-        arenaOne.init();
 
 
 
