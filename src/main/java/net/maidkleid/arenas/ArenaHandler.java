@@ -72,7 +72,6 @@ public class ArenaHandler {
     public @Nullable Arena joinArena(Player player) {
         if (freeArenas.isEmpty()) return null;
         player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
-        player.sendMessage(player.getName());
         Arena arena = freeArenas.get(0);
         freeArenas.remove(0);
         playerArenaHandler.put(player.getUniqueId(), arena);
