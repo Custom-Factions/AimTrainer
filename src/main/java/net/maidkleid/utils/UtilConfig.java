@@ -67,43 +67,12 @@ public class UtilConfig {
         });
 
         executerMapInv.put(startButton, (player) -> {
-            //player.sendMessage("Test start");
-
-            Long startTime = startTimeMap.get(player.getUniqueId());
-            Long currentTime = System.currentTimeMillis();
-
-            if (startTime == null) {
-                player.sendMessage("§6Die Zeit wurde §agestartet!");
-                main.getArenaHandler().joinArena(player);
-                startTimeMap.put(player.getUniqueId(), currentTime);
-            } else {
-                player.sendMessage("§9Die Zeit läuft bereits!");
-            }
-
-            return true;
+          main.getArenaHandler().joinArena(player);
+          return true;
         });
 
         executerMapInv.put(endButton, (player) -> {
-            //player.sendMessage("Test End!");
-
-            if (startTimeMap.containsKey(player.getUniqueId())) {
-                main.getArenaHandler().leaveArena(player);
-            }
-
-
-            Long startTime = startTimeMap.get(player.getUniqueId());
-            Long currentTime = System.currentTimeMillis();
-
-
-            if (startTime != null) {
-                player.sendMessage("§6Die Zeit wurde §4gestoppt!");
-                long duration = currentTime - startTimeMap.get(player.getUniqueId());
-                player.sendMessage("§6Die Runde hat§6 " + duration/1000 + " §6sekunden gedauert!");
-                startTimeMap.remove(player.getUniqueId());
-            } else {
-                player.sendMessage("§3Die Zeit läuft gar nicht!");
-            }
-
+            main.getArenaHandler().leaveArena(player);
             return true;
         });
 

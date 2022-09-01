@@ -16,6 +16,11 @@ import static net.maidkleid.weaponapi.weaponlib.AmmoType.AR_AMMO;
 
 public class Ak47 implements Weapon {
     @Override
+    public double getSpread(int i) {
+        return 0;
+    }
+
+    @Override
     public int getMagSize(int i) {
         return 60;
     }

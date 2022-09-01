@@ -21,7 +21,8 @@ public class ShootHitListener implements Listener {
             return;
         }
 
-        Player player = event.getProjectile().getWeaponInstance().getHandlingPlayer();
+        Player player;
+        player = event.getProjectile().getWeaponInstance().getHandlingPlayer();
         allay.setKiller(player);
         allay.remove();
         AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().addKill(player);
