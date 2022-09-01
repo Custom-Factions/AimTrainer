@@ -1,8 +1,6 @@
 package net.maidkleid.arenas;
 
-import it.unimi.dsi.fastutil.Hash;
 import net.maidkleid.AimTrainerMain;
-import net.maidkleid.arenas.Arena;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ArenaHandler {
@@ -22,11 +21,11 @@ public class ArenaHandler {
 
 
 
-    AimTrainerMain main;
+    private final AimTrainerMain main;
 
 
 
-    ArrayList<Arena> arenaList = new ArrayList<>();
+    private final ArrayList<Arena> arenaList = new ArrayList<>();
 
 
 
@@ -36,12 +35,14 @@ public class ArenaHandler {
 
 
         ConfigurationSection arenas = config.getConfigurationSection("arenas");
+        assert arenas != null;
         arenas.getKeys(false).forEach(s -> {
             ConfigurationSection arena = arenas.getConfigurationSection(s);
-            World world = Bukkit.getWorld(arena.getString("world"));
-            Location spawnLocation = locationFromConfigSection(arena.getConfigurationSection("spawnlocation"), world);
-            Location locationA = locationFromConfigSection(arena.getConfigurationSection("locationA"), world);
-            Location locationB = locationFromConfigSection(arena.getConfigurationSection("locationB"), world);
+            assert arena != null;
+            World world = Bukkit.getWorld(Objects.requireNonNull(arena.getString("world")));
+            Location spawnLocation = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("spawnlocation")), world);
+            Location locationA = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("locationA")), world);
+            Location locationB = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("locationB")), world);
 
 
             Arena arena1 = new Arena(main, s, spawnLocation, locationA, locationB);
@@ -61,7 +62,6 @@ public class ArenaHandler {
         double pitch = section.getDouble("pitch");
 
         return new Location(world,x,y,z,(float) yaw,(float) pitch);
-
     }
 
 
@@ -70,28 +70,30 @@ public class ArenaHandler {
 
 
     public @Nullable Arena joinArena(Player player) {
-        if (freeArenas.isEmpty()) return null;
+        if (freeArenas.isEmpty() || playerArenaHandler.containsKey(player.getUniqueId())) return null;
         player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
         Arena arena = freeArenas.get(0);
         freeArenas.remove(0);
         playerArenaHandler.put(player.getUniqueId(), arena);
-        arena.init(player);
+        arena.startGame(player);
         return arena;
     }
 
     public @Nullable Arena leaveArena(Player player) {
-        player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!");
         Arena arena = playerArenaHandler.get(player.getUniqueId());
         if (arena == null) return null;
-        arena.unInit();
+        arena.endGame();
         freeArenas.add(arena);
         playerArenaHandler.remove(player.getUniqueId(), arena);
+        player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!"+
+                "\nScore: " + arena.getScore());
 
         return arena;
     }
 
 
-
-
-
+    public void addKill(Player player) {
+        Arena arena = playerArenaHandler.get(player.getUniqueId());
+        if(arena != null) arena.addKill();
+    }
 }
