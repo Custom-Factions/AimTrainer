@@ -96,6 +96,7 @@ public class Arena {
                 Allay allay = w.spawn(l, Allay.class);
                 allay.setCanDuplicate(false);
                 allay.startDancing();
+                allay.setCanPickupItems(false);
                 allay.setGlowing(true);
                 livingAllays.add(allay);
                 return;
