@@ -71,6 +71,8 @@ public class Arena {
         player.teleport(oldLocation);
         main.getLogger().info(player.getName() + " has end his game: " + name + " score: " + score + "\n Das Spiel ging: " + stopTime().toMillis()/1000 + " sekunden lang!");
         Bukkit.getScheduler().cancelTask(spawnScheduler);
+        int weaponID = WeaponProvider.getWeaponID(WeaponProvider.PISTOL.getName());
+        player.getInventory().removeItem(WeaponItemMidLevelUtils.getWeaponItem(WeaponProvider.getLowestCustomModelDataID(weaponID), 1));
         livingAllays.removeIf(allay -> {
             allay.remove();
             return true;

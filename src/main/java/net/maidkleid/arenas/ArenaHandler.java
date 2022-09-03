@@ -55,8 +55,8 @@ public class ArenaHandler {
 
     private Location locationFromConfigSection(ConfigurationSection section, World world) {
         double x = section.getDouble("x");
-        double z = section.getDouble("y");
-        double y = section.getDouble("z");
+        double y = section.getDouble("y");
+        double z = section.getDouble("z");
 
         double yaw = section.getDouble("yaw");
         double pitch = section.getDouble("pitch");

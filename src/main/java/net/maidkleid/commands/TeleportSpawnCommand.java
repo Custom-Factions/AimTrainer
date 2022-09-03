@@ -28,7 +28,6 @@ public class TeleportSpawnCommand implements CommandExecutor {
 
 
 
-
         if(!(sender instanceof Player player)){
 
             sender.sendMessage(Variablen.onlyPlayer);
