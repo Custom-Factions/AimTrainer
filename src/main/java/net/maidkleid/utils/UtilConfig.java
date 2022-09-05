@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 import java.util.Vector;
@@ -23,6 +24,7 @@ public class UtilConfig {
     private final ItemStack joinPaper;
     private final ItemStack startButton;
     private final ItemStack endButton;
+    private final ItemStack score;
 
 
 
@@ -38,6 +40,7 @@ public class UtilConfig {
         joinPaper = new ItemStack(Material.PAPER);
         startButton = new ItemStack(Material.GREEN_DYE);
         endButton = new ItemStack(Material.RED_DYE);
+        score = new ItemStack(Material.PAPER);
 
 
 
@@ -50,8 +53,17 @@ public class UtilConfig {
            itemMeta.setDisplayName("§4End-Button");
         });
 
+        score.editMeta(itemMeta -> {
+           itemMeta.setDisplayName("§6LastScore");
+            ArrayList<String> lore = new ArrayList<>();
+            lore.add("");
+            lore.add("Dein lezter Score: ");
+            itemMeta.setLore(lore);
+        });
+
         startInventory.setItem(10, startButton);
         startInventory.setItem(16, endButton);
+        startInventory.setItem(19, score);
 
 
         joinPaper.editMeta(itemMeta -> {
@@ -75,6 +87,8 @@ public class UtilConfig {
             main.getArenaHandler().leaveArena(player);
             return true;
         });
+
+
 
 
     }
