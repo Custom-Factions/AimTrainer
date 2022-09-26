@@ -7,12 +7,15 @@ import net.maidkleid.weaponapi.weaponlib.WeaponProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
+import java.io.File;
 import java.nio.Buffer;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -84,9 +87,16 @@ public class Arena {
     }
 
     protected void checkAllays() {
+
+
+        FileConfiguration config = main.getConfig();
+
+
+        int allayValue = config.getInt("allayspawnmax");
+
          livingAllays.removeIf(Entity::isDead);
          spawnAllay();
-         if(livingAllays.size() >= 15) main.getArenaHandler().leaveArena(player);
+         if(livingAllays.size() >= allayValue) main.getArenaHandler().leaveArena(player);
     }
     protected void spawnAllay() {
         World w = spawnLocation.getWorld();

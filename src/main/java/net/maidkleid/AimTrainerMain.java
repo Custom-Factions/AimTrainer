@@ -1,6 +1,7 @@
 package net.maidkleid;
 
 import net.maidkleid.commands.TeleportSpawnCommand;
+import net.maidkleid.commands.setMaxAllaySpawnCommand;
 import net.maidkleid.listeners.*;
 import net.maidkleid.arenas.ArenaHandler;
 import net.maidkleid.utils.UtilConfig;
@@ -32,6 +33,7 @@ public final class AimTrainerMain extends JavaPlugin {
 
         //commands
         getCommand("aimtrainer").setExecutor(new TeleportSpawnCommand(this));
+        getCommand("allayspawn").setExecutor(new setMaxAllaySpawnCommand(this));
 
 
         //listeners
