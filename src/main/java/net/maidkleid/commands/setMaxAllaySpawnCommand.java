@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class setMaxAllaySpawnCommand implements CommandExecutor {
 
-    AimTrainerMain main;
-
+    private final AimTrainerMain main;
     public setMaxAllaySpawnCommand(AimTrainerMain main) {
         this.main = main;
     }

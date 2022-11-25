@@ -1,17 +1,12 @@
 package net.maidkleid.commands;
 
 import net.maidkleid.AimTrainerMain;
-import net.maidkleid.arenas.Arena;
-import net.maidkleid.utils.Variablen;
-import org.bukkit.Location;
-import org.bukkit.World;
+import net.maidkleid.utils.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
 
 public class TeleportSpawnCommand implements CommandExecutor {
 
@@ -23,31 +18,16 @@ public class TeleportSpawnCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-
-
-
-
-
         if(!(sender instanceof Player player)){
 
-            sender.sendMessage(Variablen.onlyPlayer);
+            sender.sendMessage(Messages.DE.onlyPlayer());
             return false;
         }
 
         if(args.length != 0){
-            player.sendMessage(Variablen.prefix + "§eBenutze /aimtrainer <Arena>");
+            player.sendMessage(Messages.PREFIX + "§eBenutze /aimtrainer <Arena>");
             return false;
         }
-
-
-
-
-
-
-
-
-
-
         return false;
     }
 }

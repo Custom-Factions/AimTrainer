@@ -1,48 +1,35 @@
 package net.maidkleid.arenas;
 
 import net.maidkleid.AimTrainerMain;
-import net.maidkleid.utils.Variablen;
+import net.maidkleid.utils.Messages;
 import net.maidkleid.weaponapi.utils.WeaponItemMidLevelUtils;
 import net.maidkleid.weaponapi.weaponlib.WeaponProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-
-import java.io.File;
-import java.nio.Buffer;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Arena {
 
 
-   
     private Player player;
     private final String name;
     private final Location spawnLocation;
-
     private final Box box;
-
     private long startTime;
     private final AimTrainerMain main;
     private Location oldLocation;
-
     private int spawnScheduler;
-
     private final ArrayList<Allay> livingAllays;
-
-
     private int score;
-
 
 
      Arena(AimTrainerMain main, String name, Location spawnLocation, Location boxLocationOne, Location boxLocationTwo){
@@ -60,14 +47,13 @@ public class Arena {
         main.getLogger().info(player.getName() + " has started the game: " + name);
         this.player = player;
         this.player.teleport(spawnLocation);
-        this.player.sendMessage(Variablen.teleport);
+        this.player.sendMessage(Messages.DE.teleport());
         startTime();
         spawnScheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, this::checkAllays, 1,20);
         //ItemStack pistol = WeaponItemMidLevelUtils.getWeaponItem(WeaponProvider.getWeaponID(WeaponProvider.PISTOL.getName()), 1);
         int weaponID = WeaponProvider.getWeaponID(WeaponProvider.PISTOL.getName());
         ItemStack weaponItem = WeaponItemMidLevelUtils.getWeaponItem(WeaponProvider.getLowestCustomModelDataID(weaponID), 1);
         player.getInventory().setItem(0,weaponItem);
-        
     }
 
     protected void endGame() {
@@ -87,11 +73,7 @@ public class Arena {
     }
 
     protected void checkAllays() {
-
-
         FileConfiguration config = main.getConfig();
-
-
         int allayValue = config.getInt("allayspawnmax");
 
          livingAllays.removeIf(Entity::isDead);

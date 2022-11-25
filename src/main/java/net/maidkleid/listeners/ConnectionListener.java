@@ -1,5 +1,6 @@
 package net.maidkleid.listeners;
 
+import net.kyori.adventure.text.Component;
 import net.maidkleid.AimTrainerMain;
 import net.maidkleid.utils.UtilConfig;
 import org.bukkit.entity.Player;
@@ -11,29 +12,22 @@ import org.bukkit.inventory.ItemStack;
 
 public class ConnectionListener implements Listener {
 
-    private final AimTrainerMain main;
-
-    public ConnectionListener(AimTrainerMain main) {
-        this.main = main;
-    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 
         UtilConfig joinUtilConfig = AimTrainerMain.getPlugin(AimTrainerMain.class).getJoinItems();
 
-
         ItemStack joinPaper = joinUtilConfig.getJoinPaper();
-
 
         Player player = event.getPlayer();
         player.getInventory().setItem(4, joinPaper);
-        event.setJoinMessage("§7[§2+§7] " + player.getName() + " hat den Server betreten!");
+        event.joinMessage(Component.text("§7[§2+§7] " + player.getName() + " hat den Server betreten!"));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        event.setQuitMessage("§7[§c-§7] " + player.getName() + " hat den Server verlassen!");
+        event.quitMessage(Component.text("§7[§c-§7] " + player.getName() + " hat den Server verlassen!"));
     }
 }

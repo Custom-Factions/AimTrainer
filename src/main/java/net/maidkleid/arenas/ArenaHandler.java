@@ -18,21 +18,10 @@ public class ArenaHandler {
 
     private final HashMap<UUID, Arena> playerArenaHandler = new HashMap<>();
     private final ArrayList<Arena> freeArenas = new ArrayList<>();
-
-
-
-    private final AimTrainerMain main;
-
-
-
     private final ArrayList<Arena> arenaList = new ArrayList<>();
 
 
-
-
     public ArenaHandler(AimTrainerMain main, FileConfiguration config) {
-        this.main = main;
-
 
         ConfigurationSection arenas = config.getConfigurationSection("arenas");
         assert arenas != null;
@@ -43,7 +32,6 @@ public class ArenaHandler {
             Location spawnLocation = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("spawnlocation")), world);
             Location locationA = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("locationA")), world);
             Location locationB = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("locationB")), world);
-
 
             Arena arena1 = new Arena(main, s, spawnLocation, locationA, locationB);
 
@@ -63,12 +51,6 @@ public class ArenaHandler {
 
         return new Location(world,x,y,z,(float) yaw,(float) pitch);
     }
-
-
-
-
-
-
     public @Nullable Arena joinArena(Player player) {
         if (freeArenas.isEmpty() || playerArenaHandler.containsKey(player.getUniqueId())) return null;
         player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
@@ -90,7 +72,6 @@ public class ArenaHandler {
 
         return arena;
     }
-
 
     public void addKill(Player player) {
         Arena arena = playerArenaHandler.get(player.getUniqueId());
