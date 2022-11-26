@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public abstract class GuiInv extends InvHandler.Inv {
@@ -34,6 +35,7 @@ public abstract class GuiInv extends InvHandler.Inv {
     private final Set<ItemStack> lockedItems = new HashSet<>();
     private final Set<NamespacedKey> lockedKeys = new HashSet<>();
     private final HashMap<ItemStack, InventoryClickExecutor> stackEventMap = new HashMap<>();
+
 
     GuiInv(int size, int... unlockedSlots) {
         super(size);
@@ -114,7 +116,7 @@ public abstract class GuiInv extends InvHandler.Inv {
     }
 
     public boolean hasLockedItem(@NotNull ItemStack stack) {
-        return lockedItems.contains(stack) && hasLockedKey(stack);
+        return lockedItems.contains(stack.asOne()) && hasLockedKey(stack);
     }
 
     public boolean hasLockedKey(@NotNull ItemStack stack) {
@@ -170,7 +172,9 @@ public abstract class GuiInv extends InvHandler.Inv {
     private boolean onClickEvent(InventoryClickEvent clickEvent) {
         int slot = clickEvent.getSlot();
         checkSlotForEvent(clickEvent, slot);
-        ItemStack clickedItem = inv.getItem(slot);
+        ItemStack item = inv.getItem(slot);
+        if (item == null) return true;
+        ItemStack clickedItem = Objects.requireNonNull(item).asOne();
         InventoryClickExecutor inventoryClickExecutor = stackEventMap.get(clickedItem);
         if (inventoryClickExecutor != null) inventoryClickExecutor.execute(clickEvent);
         InventoryClickExecutor inventoryClickExecutor1 = keyValueEventMap.get(getItemStackUniversalNameSpaceEvent(clickedItem));

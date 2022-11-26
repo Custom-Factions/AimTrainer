@@ -1,5 +1,7 @@
+allayspawnmax: 5
 arenas:
   arena1:
+    buildbarriercage: true
     world: "world"
     spawnlocation:
       x: 100
@@ -13,7 +15,7 @@ arenas:
       z: 95
     locationB:
       x: 120
-      y: 70
+      y: 75
       z: 105
 
 

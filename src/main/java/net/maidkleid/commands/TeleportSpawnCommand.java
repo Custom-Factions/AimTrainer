@@ -12,6 +12,7 @@ public class TeleportSpawnCommand implements CommandExecutor {
 
     AimTrainerMain main;
 
+
     public TeleportSpawnCommand(AimTrainerMain main) {
         this.main = main;
     }

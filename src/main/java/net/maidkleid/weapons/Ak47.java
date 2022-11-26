@@ -1,13 +1,10 @@
 package net.maidkleid.weapons;
 
-import net.maidkleid.weaponapi.utils.LevelMapper;
 import net.maidkleid.weaponapi.weaponlib.AmmoType;
 import net.maidkleid.weaponapi.weaponlib.ProjectileWeaponInstance;
 import net.maidkleid.weaponapi.weaponlib.Weapon;
-import net.maidkleid.weaponapi.weaponlib.WeaponInstance;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import static net.maidkleid.weaponapi.weaponlib.AmmoType.AR_AMMO;
 
 public class Ak47 implements Weapon {
+
     @Override
     public double getSpread(int i) {
         return 0;
@@ -37,28 +35,17 @@ public class Ak47 implements Weapon {
 
     @Override
     public ProjectileWeaponInstance<Firework> getWeaponNewInstance(Player player, int i, ItemStack itemStack) {
-
-        return null;
+        return new ProjectileWeaponInstance<>(this, player, i, itemStack, Firework.class, 5);
     }
 
     @Override
     public Sound getShootSound(int i) {
-        return null;
-    }
-
-    @Override
-    public LevelMapper getLevelMapper() {
-        return Weapon.super.getLevelMapper();
+        return Sound.BLOCK_BAMBOO_HIT;
     }
 
     @Override
     public double getBulletDamage(int i) {
         return 0;
-    }
-
-    @Override
-    public double getBulletHeadShotDamage(int level) {
-        return Weapon.super.getBulletHeadShotDamage(level);
     }
 
     @Override
@@ -73,11 +60,7 @@ public class Ak47 implements Weapon {
 
     @Override
     public Particle getParticle() {
-        return null;
+        return Particle.ASH;
     }
 
-    @Override
-    public double getParticleDensity() {
-        return Weapon.super.getParticleDensity();
-    }
 }

@@ -32,14 +32,29 @@ public class ArenaHandler {
             Location spawnLocation = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("spawnlocation")), world);
             Location locationA = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("locationA")), world);
             Location locationB = locationFromConfigSection(Objects.requireNonNull(arena.getConfigurationSection("locationB")), world);
-
-            Arena arena1 = new Arena(main, s, spawnLocation, locationA, locationB);
-
-            arenaList.add(arena1);
+            boolean b = arena.getBoolean("buildbarriercage");
+            addArena(new Arena(main, s, spawnLocation, locationA, locationB, b));
         });
 
-        freeArenas.addAll(arenaList);
     }
+
+    private void addArena(Arena arena) {
+        if (arenaList.contains(arena)) return;
+        arenaList.add(arena);
+        freeArenas.add(arena);
+    }
+
+    private void removeArena(Arena arena) {
+        if (!arenaList.contains(arena)) return;
+        if (!freeArenas.contains(arena)) {
+            Player player = arena.getPlayer();
+            playerArenaHandler.remove(player.getUniqueId());
+            player.sendMessage("Arena was closed by ArenaHandler");
+            arena.endGame();
+        }
+        arenaList.remove(arena);
+    }
+
 
     private Location locationFromConfigSection(ConfigurationSection section, World world) {
         double x = section.getDouble("x");
@@ -52,11 +67,13 @@ public class ArenaHandler {
         return new Location(world,x,y,z,(float) yaw,(float) pitch);
     }
     public @Nullable Arena joinArena(Player player) {
+        //player.sendMessage("You Tried to join");
         if (freeArenas.isEmpty() || playerArenaHandler.containsKey(player.getUniqueId())) return null;
         player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
         Arena arena = freeArenas.get(0);
         freeArenas.remove(0);
         playerArenaHandler.put(player.getUniqueId(), arena);
+        //System.out.println(this + " " + arena);
         arena.startGame(player);
         return arena;
     }
@@ -67,7 +84,7 @@ public class ArenaHandler {
         arena.endGame();
         freeArenas.add(arena);
         playerArenaHandler.remove(player.getUniqueId(), arena);
-        player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!"+
+        player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!" +
                 "\nScore: " + arena.getScore());
 
         return arena;
@@ -75,6 +92,15 @@ public class ArenaHandler {
 
     public void addKill(Player player) {
         Arena arena = playerArenaHandler.get(player.getUniqueId());
-        if(arena != null) arena.addKill();
+        if (arena != null) arena.addKill();
+    }
+
+    @Override
+    public String toString() {
+        return "ArenaHandler{" +
+                "playerArenaHandler=" + playerArenaHandler +
+                ", freeArenas=" + freeArenas +
+                ", arenaList=" + arenaList +
+                '}';
     }
 }

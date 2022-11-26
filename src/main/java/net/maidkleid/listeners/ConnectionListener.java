@@ -12,6 +12,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class ConnectionListener implements Listener {
 
+    private final AimTrainerMain main;
+
+    public ConnectionListener(AimTrainerMain main) {
+        this.main = main;
+    }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
@@ -23,11 +28,14 @@ public class ConnectionListener implements Listener {
         Player player = event.getPlayer();
         player.getInventory().setItem(4, joinPaper);
         event.joinMessage(Component.text("§7[§2+§7] " + player.getName() + " hat den Server betreten!"));
+        main.getDataBase().getData(player.getUniqueId()).save();
+
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         event.quitMessage(Component.text("§7[§c-§7] " + player.getName() + " hat den Server verlassen!"));
+        main.getDataBase().getData(player.getUniqueId()).save();
     }
 }

@@ -25,6 +25,7 @@ public class InvHandler {
 
         protected final Inventory inv;
 
+
         Inv(int size) {
             this.inv = initInventory(size);
         }
