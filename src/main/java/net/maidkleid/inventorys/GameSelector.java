@@ -15,6 +15,8 @@ public class GameSelector extends GuiInv {
     private static final ItemStack startButton;
     private static final ItemStack endButton;
 
+    private static final ItemStack settingsButton;
+
     static {
         //START_BUTTON
         startButton = new ItemStack(Material.GREEN_DYE);
@@ -22,23 +24,33 @@ public class GameSelector extends GuiInv {
         GuiInv.writeItemStackUniversalNameSpaceEvent(startButton, "startButton", event -> {
             //System.out.println("start-Button");
             if (!(event.getWhoClicked() instanceof Player player)) return;
-            player.sendMessage("start-Button");
+            //player.sendMessage("start-Button");
             AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().joinArena(player);
 
         });
         startButton.editMeta(itemMeta -> itemMeta.displayName(Component.text("§2Start-Button")));
+        GuiInv.writeLockUniversalByNameSpace(startButton);
 
         //END_BUTTON
         endButton = new ItemStack(Material.RED_DYE);
         GuiInv.writeItemStackUniversalNameSpaceEvent(endButton, "stopButton", event -> {
             //System.out.println("stop-Button");
             if (!(event.getWhoClicked() instanceof Player player)) return;
-            player.sendMessage("stop-Button");
+            //player.sendMessage("stop-Button");
             AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().leaveArena(player);
         });
-        GuiInv.writeLockUniversalByNameSpace(startButton);
+
         GuiInv.writeLockUniversalByNameSpace(endButton);
         endButton.editMeta(itemMeta -> itemMeta.displayName(Component.text("§4End-Button")));
+
+        //SETTINGS_BUTTON
+        settingsButton = new ItemStack(Material.COMMAND_BLOCK);
+        GuiInv.writeItemStackUniversalNameSpaceEvent(settingsButton, "settingButton", event -> {
+            if (!(event.getWhoClicked() instanceof Player player)) return;
+            player.openInventory(new GameConfig(player).inv);
+        });
+        GuiInv.writeLockUniversalByNameSpace(settingsButton);
+        settingsButton.editMeta(itemMeta -> itemMeta.displayName(Component.text("§4Settings")));
     }
 
     public GameSelector(Player owningPlayer, int score) {
@@ -58,6 +70,7 @@ public class GameSelector extends GuiInv {
         });
         setItem(10, startButton);
         setItem(16, endButton);
+        setItem(13, settingsButton);
         setItem(19, scoreButton);
     }
 

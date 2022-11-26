@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryInteractEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
@@ -51,9 +52,21 @@ public abstract class GuiInv extends InvHandler.Inv {
 
     public static void writeItemStackUniversalNameSpaceEvent(ItemStack stack, String uniqueEventKey, InventoryClickExecutor executor) {
         stack.editMeta(itemMeta -> {
-            itemMeta.getPersistentDataContainer().set(EVENT_KEY, PersistentDataType.STRING, uniqueEventKey);
-            keyValueEventMap.put(uniqueEventKey, executor);
+            writeItemStackUniversalNameSpaceEvent(uniqueEventKey, itemMeta);
+            writeItemStackUniversalNameSpaceEvent(uniqueEventKey, executor);
         });
+    }
+
+    public static void writeItemStackUniversalNameSpaceEvent(ItemStack stack, String uniqueEventKey) {
+        stack.editMeta(itemMeta -> writeItemStackUniversalNameSpaceEvent(uniqueEventKey, itemMeta));
+    }
+
+    public static void writeItemStackUniversalNameSpaceEvent(String uniqueEventKey, ItemMeta itemMeta) {
+        itemMeta.getPersistentDataContainer().set(EVENT_KEY, PersistentDataType.STRING, uniqueEventKey);
+    }
+
+    public static void writeItemStackUniversalNameSpaceEvent(String uniqueEventKey, InventoryClickExecutor executor) {
+        keyValueEventMap.put(uniqueEventKey, executor);
     }
 
     public static @Nullable String getItemStackUniversalNameSpaceEvent(ItemStack stack) {

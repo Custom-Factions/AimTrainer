@@ -20,7 +20,7 @@ public final class AimTrainerMain extends JavaPlugin {
     private UtilConfig configUtils;
     private ArenaHandler arenaHandler;
 
-    private DataBase dataBase;
+    private static DataBase dataBase;
 
 
 
@@ -62,7 +62,7 @@ public final class AimTrainerMain extends JavaPlugin {
         return arenaHandler;
     }
 
-    public DataBase getDataBase() {
+    public static DataBase getDataBase() {
         return dataBase;
     }
 }
