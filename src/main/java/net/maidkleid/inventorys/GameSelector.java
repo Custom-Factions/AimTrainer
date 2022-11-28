@@ -37,7 +37,7 @@ public class GameSelector extends GuiInv {
             //System.out.println("stop-Button");
             if (!(event.getWhoClicked() instanceof Player player)) return;
             //player.sendMessage("stop-Button");
-            AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().leaveArena(player);
+            AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().leaveArena(player.getUniqueId());
         });
 
         GuiInv.writeLockUniversalByNameSpace(endButton);

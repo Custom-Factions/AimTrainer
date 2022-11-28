@@ -37,7 +37,7 @@ public class GameConfig extends GuiInv {
         if (!(clickEvent.getClickedInventory().getHolder() instanceof GameConfig gameConfig)) return;
         if (clickEvent.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             if (gameConfig.data.getDifficulty() instanceof Difficulty.Defaults)
-                gameConfig.data.setDifficulty(new Difficulty.CustomDifficulty(1000, 10));
+                gameConfig.data.setDifficulty(new Difficulty.CustomDifficulty(20, 10));
             else gameConfig.data.setDifficulty(Difficulty.Defaults.EASY);
             return;
         }
@@ -49,6 +49,7 @@ public class GameConfig extends GuiInv {
             }
         }
         gameConfig.data.setDifficulty(d);
+        gameConfig.data.save();
         gameConfig.setDifficultyItem();
     }
 

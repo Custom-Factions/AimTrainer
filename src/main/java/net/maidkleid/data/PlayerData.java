@@ -31,6 +31,19 @@ public class PlayerData implements ConfigurationSerializable {
      }
 
      @Override
+     public @NotNull Map<String, Object> serialize() {
+          LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+          map.put("player", player.toString());
+          map.put("weapon", weaponName);
+          if (difficulty instanceof Difficulty.Defaults difficulty) {
+               map.put("difficulty", difficulty.name());
+          } else {
+               map.put("difficulty", difficulty);
+          }
+          return map;
+     }
+
+     @Override
      public boolean equals(Object o) {
           if (this == o) return true;
           if (o == null || getClass() != o.getClass()) return false;
@@ -53,10 +66,7 @@ public class PlayerData implements ConfigurationSerializable {
      }
 
      public void save() {
-          try {
-               db.save(this);
-          } catch (Exception ignored) {
-          }
+          db.save(this);
      }
 
      public String getWeaponName() {
@@ -80,15 +90,11 @@ public class PlayerData implements ConfigurationSerializable {
      }
 
      @Override
-     public @NotNull Map<String, Object> serialize() {
-          LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-          map.put("player", player.toString());
-          map.put("weapon", weaponName);
-          if (difficulty instanceof Difficulty.Defaults difficulty) {
-               map.put("difficulty", difficulty.name());
-          } else {
-               map.put("difficulty", difficulty);
-          }
-          return map;
+     public String toString() {
+          return "PlayerData{" +
+                  "player=" + player +
+                  ", weaponName='" + weaponName + '\'' +
+                  ", difficulty=" + difficulty +
+                  '}';
      }
 }

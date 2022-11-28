@@ -1,27 +1,33 @@
 package net.maidkleid.data;
 
 import net.maidkleid.AimTrainerMain;
+import net.maidkleid.arenas.Game;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ConfigDB implements DataBase {
 
     private final HashMap<UUID, PlayerData> dataHashMap = new HashMap<>();
-    private final File dataPath;
+    private final File playerDataPath;
+    private final File gameStatsPath;
 
     public ConfigDB(AimTrainerMain main) {
-        dataPath = new File(main.getDataFolder() + File.separator + "playerdata");
-        dataPath.mkdir(); //ignored
+        playerDataPath = new File(main.getDataFolder() + File.separator + "playerdata");
+        playerDataPath.mkdir(); //ignored
+        gameStatsPath = new File(main.getDataFolder() + File.separator + "gamestats");
+        gameStatsPath.mkdir();
     }
 
     @Override
     public void save(PlayerData playerData) {
-
+        //AimTrainerMain.getPlugin(AimTrainerMain.class).getLogger().info("save playerData: " + playerData);
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
         yamlConfiguration.set("data", playerData);
         try {
@@ -43,12 +49,24 @@ public class ConfigDB implements DataBase {
         return playerData;
     }
 
+    @Override
+    public void save(Game game) {
+        File file = new File(gameStatsPath + File.separator + game.user() + ".log");
+        try {
+            FileWriter fileWriter = new FileWriter(file, true);
+            fileWriter.write(game + "\n");
+            fileWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @NotNull
     private File getDataFile(UUID uuid) {
-        return new File(dataPath + File.separator + uuid + ".yml");
+        return new File(playerDataPath + File.separator + uuid + ".yml");
     }
 
     private PlayerData fromFile(File file) {
-        return (PlayerData) YamlConfiguration.loadConfiguration(file).get("data");
+        return ((PlayerData) Objects.requireNonNull(YamlConfiguration.loadConfiguration(file).get("data"))).setDb(this);
     }
 }

@@ -7,7 +7,6 @@ import net.maidkleid.weapons.WeaponTable;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Allay;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -17,20 +16,17 @@ import org.jetbrains.annotations.Nullable;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class Arena {
-
-
-    private Player player;
     private final String name;
     private final Location spawnLocation;
     private final Box box;
-    private long startTime;
     private final AimTrainerMain main;
-    private Location oldLocation;
+    private Game currentGame;
     private int spawnScheduler;
     private final ArrayList<Allay> livingAllays;
-    private int score;
+    private ArenaHandler handler;
 
 
     Arena(AimTrainerMain main, String name, Location spawnLocation, Location boxLocationOne, Location boxLocationTwo, boolean setBarrierCage) {
@@ -39,56 +35,60 @@ public class Arena {
         this.spawnLocation = spawnLocation;
         this.box = new Box(boxLocationOne, boxLocationTwo);
         if (setBarrierCage) box.buildBarrierCage();
-        score = 0;
         livingAllays = new ArrayList<>();
     }
 
-    protected void startGame(Player player) {
-        score = 0;
-        oldLocation = player.getLocation();
+    protected void startGame(Player player, ArenaHandler handler) {
+        this.handler = handler;
         main.getLogger().info(player.getName() + " has started the game: " + name);
-        this.player = player;
-        this.player.teleport(spawnLocation);
-        this.player.sendMessage(Messages.DE.teleport());
-        startTime();
-        spawnScheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, this::checkAllays, 1, 20);
+        UUID uuid = player.getUniqueId();
+
+        currentGame = Game.newGame(this, AimTrainerMain.getDataBase().getData(uuid));
+        player.teleport(spawnLocation);
+        player.sendMessage(Messages.DE.teleport());
+
+        spawnScheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, this::checkAllays, currentGame.difficulty().spawnRate(), currentGame.difficulty().spawnRate());
         //ItemStack pistol = WeaponItemMidLevelUtils.getWeaponItem(WeaponProvider.getWeaponID(WeaponProvider.PISTOL.getName()), 1);
-        int weaponID = WeaponTable.AK47_ID;
-        int lowestCustomModelDataID = WeaponTable.getLowestCustomModelDataID(weaponID);
-        main.getLogger().info(lowestCustomModelDataID + " " + WeaponTable.AK47_ID + " " + WeaponTable.AK47 + " " + WeaponTable.getWeapon(lowestCustomModelDataID));
+        //int weaponID = WeaponTable.AK47_ID;
+        //int lowestCustomModelDataID = WeaponTable.getLowestCustomModelDataID(weaponID);
+        //main.getLogger().info(lowestCustomModelDataID + " " + WeaponTable.AK47_ID + " " + WeaponTable.AK47 + " " + WeaponTable.getWeapon(lowestCustomModelDataID));
+        int lowestCustomModelDataID = WeaponTable.getLowestCustomModelDataID(WeaponTable.getWeaponID(currentGame.weapon()));
         ItemStack weaponItem = WeaponItemMidLevelUtils.getWeaponItem(lowestCustomModelDataID, 1);
         player.getInventory().setItem(0, weaponItem);
     }
 
-    protected void endGame() {
-        player.teleport(oldLocation);
-        main.getLogger().info(player.getName() + " has end his game: " + name + " score: " + score + "\n Das Spiel ging: " + stopTime().toMillis() / 1000 + " sekunden lang!");
+    protected Game endGame() {
+        Player p = p();
+        main.getLogger().info(p.getName() + " has end his game: " + name + " score: " + currentGame.score().get() + "\n Das Spiel ging: " + stopTime().toMillis() / 1000 + " sekunden lang!");
         Bukkit.getScheduler().cancelTask(spawnScheduler);
+
         //int weaponID = WeaponTable.getWeaponID(WeaponProvider.PISTOL.getName());
         //player.getInventory().removeItem(WeaponItemMidLevelUtils.getWeaponItem(WeaponProvider.getLowestCustomModelDataID(weaponID), 1));
-        @Nullable ItemStack[] contents = player.getInventory().getContents();
+        @Nullable ItemStack[] contents = p.getInventory().getContents();
         for (int i = 0; i < contents.length; i++) {
             if (contents[i] == null) continue;
-            if (WeaponTable.getWeaponInstance(contents[i], player, i) != null)
-                player.getInventory().remove(contents[i]);
+            if (WeaponTable.getWeaponInstance(contents[i], p, i) != null)
+                p.getInventory().remove(contents[i]);
         }
         livingAllays.removeIf(allay -> {
             allay.remove();
             return true;
         });
+        Game g = currentGame;
+        currentGame = null;
+        return g;
     }
 
     protected void addKill() {
-        score++;
+        currentGame.score().incrementAndGet();
     }
 
     protected void checkAllays() {
-        FileConfiguration config = main.getConfig();
-        int allayValue = config.getInt("allayspawnmax");
+        int allayValue = currentGame.difficulty().maxSpawns();
 
         livingAllays.removeIf(Entity::isDead);
         spawnAllay();
-        if (livingAllays.size() >= allayValue) main.getArenaHandler().leaveArena(player);
+        if (livingAllays.size() >= allayValue) main.getArenaHandler().leaveArena(currentGame.user());
     }
     protected void spawnAllay() {
         World w = spawnLocation.getWorld();
@@ -106,42 +106,31 @@ public class Arena {
         }
     }
 
-    private void startTime() {
-
-         startTime = System.currentTimeMillis();
-    }
     private Duration stopTime() {
-
-        return Duration.of(System.currentTimeMillis() - startTime, ChronoUnit.MILLIS);
+        return Duration.of(System.currentTimeMillis() - currentGame.startTime(), ChronoUnit.MILLIS);
     }
 
-
-
-    public int getScore() {
-        return score;
-    }
-
-    public Player getPlayer() {
+    Player p() {
+        UUID user = currentGame.user();
+        Player player = Bukkit.getPlayer(user);
+        if (player == null) handler.leaveArena(user);
         return player;
-    }
-
-    public Location getSpawnLocation() {
-        return spawnLocation.clone();
     }
 
     @Override
     public String toString() {
         return "Arena{" +
-                "player=" + player +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", spawnLocation=" + spawnLocation +
                 ", box=" + box +
-                ", startTime=" + startTime +
+                ", currentGame=" + currentGame +
                 ", main=" + main +
-                ", oldLocation=" + oldLocation +
                 ", spawnScheduler=" + spawnScheduler +
                 ", livingAllays=" + livingAllays +
-                ", score=" + score +
                 '}';
+    }
+
+    public String getName() {
+        return name;
     }
 }

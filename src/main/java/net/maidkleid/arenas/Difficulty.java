@@ -14,9 +14,9 @@ public interface Difficulty {
     int maxSpawns();
 
     enum Defaults implements Difficulty {
-        EASY(2000, 20),
-        NORMAL(1000, 10),
-        HARD(500, 10);
+        EASY(40, 20),
+        NORMAL(20, 10),
+        HARD(10, 10);
 
         private final long spawnRate;
 

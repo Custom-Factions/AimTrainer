@@ -47,7 +47,7 @@ public class ArenaHandler {
     private void removeArena(Arena arena) {
         if (!arenaList.contains(arena)) return;
         if (!freeArenas.contains(arena)) {
-            Player player = arena.getPlayer();
+            Player player = arena.p();
             playerArenaHandler.remove(player.getUniqueId());
             player.sendMessage("Arena was closed by ArenaHandler");
             arena.endGame();
@@ -69,25 +69,25 @@ public class ArenaHandler {
     public @Nullable Arena joinArena(Player player) {
         //player.sendMessage("You Tried to join");
         if (freeArenas.isEmpty() || playerArenaHandler.containsKey(player.getUniqueId())) return null;
-        player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
+        //player.sendMessage("§6Du bist der Arena erfolgreich §2beigetreten!");
         Arena arena = freeArenas.get(0);
         freeArenas.remove(0);
         playerArenaHandler.put(player.getUniqueId(), arena);
         //System.out.println(this + " " + arena);
-        arena.startGame(player);
+        arena.startGame(player, this);
         return arena;
     }
 
-    public @Nullable Arena leaveArena(Player player) {
-        Arena arena = playerArenaHandler.get(player.getUniqueId());
+    public @Nullable Game leaveArena(UUID user) {
+        Arena arena = playerArenaHandler.get(user);
         if (arena == null) return null;
-        arena.endGame();
         freeArenas.add(arena);
-        playerArenaHandler.remove(player.getUniqueId(), arena);
-        player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!" +
-                "\nScore: " + arena.getScore());
-
-        return arena;
+        playerArenaHandler.remove(user, arena);
+        //player.sendMessage("§6Du hast die Arena erfolgreich §4verlassen!" +
+        //        "\nScore: " + arena.getScore());
+        Game game = arena.endGame();
+        AimTrainerMain.getDataBase().save(game);
+        return game;
     }
 
     public void addKill(Player player) {
