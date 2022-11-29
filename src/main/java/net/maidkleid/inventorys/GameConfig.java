@@ -8,6 +8,7 @@ import net.maidkleid.weaponapi.utils.WeaponItemMidLevelUtils;
 import net.maidkleid.weapons.WeaponTable;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,9 +21,17 @@ public class GameConfig extends GuiInv {
     private static final String difficultyChangeEventNMS = "Difficulty";
     private static final int difficultySlot = 11;
     private static final int weaponChoseSlot = 15;
+    private static final String choseWeapon = "choseWeapon";
 
     static {
+
         GuiInv.writeItemStackUniversalNameSpaceEvent(difficultyChangeEventNMS, GameConfig::changeDifficulty);
+        GuiInv.writeItemStackUniversalNameSpaceEvent(choseWeapon, event -> {
+            HumanEntity whoClicked = event.getWhoClicked();
+            if (whoClicked.hasPermission("aimtrainer.admin.weaponselector"))
+                whoClicked.openInventory(WeaponSelector.getAdminMenu().getInventory());
+            else whoClicked.openInventory(WeaponSelector.get().getInventory());
+        });
     }
 
     private final PlayerData data;
@@ -90,7 +99,7 @@ public class GameConfig extends GuiInv {
     public ItemStack getWeaponChoseItem() {
         ItemStack stack = WeaponItemMidLevelUtils.getWeaponItem(WeaponTable.getLowestCustomModelDataID(WeaponTable.getWeaponID(data.getWeaponName())), 1);
         GuiInv.writeLockUniversalByNameSpace(stack);
-
+        GuiInv.writeItemStackUniversalNameSpaceEvent(stack, choseWeapon);
         return stack;
     }
 

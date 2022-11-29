@@ -9,13 +9,17 @@ import net.maidkleid.data.DataBase;
 import net.maidkleid.data.PlayerData;
 import net.maidkleid.listeners.*;
 import net.maidkleid.utils.UtilConfig;
+import net.maidkleid.weaponapi.weaponlib.WeaponProvider;
 import net.maidkleid.weapons.WeaponTable;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class AimTrainerMain extends JavaPlugin {
+import java.util.ArrayList;
+import java.util.List;
 
+public final class AimTrainerMain extends JavaPlugin {
 
 
     private UtilConfig configUtils;
@@ -23,7 +27,24 @@ public final class AimTrainerMain extends JavaPlugin {
 
     private static DataBase dataBase;
 
+    private static final ArrayList<String> allActivatedWeapons = new ArrayList<>();
 
+    public static List<String> getActivatedWeapons() {
+        return List.copyOf(allActivatedWeapons);
+    }
+
+    public UtilConfig getJoinItems() {
+        return configUtils;
+    }
+
+
+    public ArenaHandler getArenaHandler() {
+        return arenaHandler;
+    }
+
+    public static DataBase getDataBase() {
+        return dataBase;
+    }
 
     @Override
     public void onEnable() {
@@ -32,8 +53,21 @@ public final class AimTrainerMain extends JavaPlugin {
 
         getLogger().info("Extra generated Weapons: " + WeaponTable.weaponTableOnlyWeaponsNames);
 
-        getConfig().options().copyDefaults();
+        //getConfig().options().copyDefaults();
         saveDefaultConfig();
+        List<String> allWeaponNames = WeaponProvider.getAllWeaponNames();
+        if (!getConfig().contains("weapons"))
+            for (String w : allWeaponNames)
+                getConfig().set("weapons." + w, false);
+        ConfigurationSection weapons = getConfig().getConfigurationSection("weapons");
+
+        for (String w : allWeaponNames) {
+            assert weapons != null;
+            if (weapons.contains(w)) weapons.set(w, false);
+            if (weapons.getBoolean(w)) allWeaponNames.add(w);
+        }
+        saveConfig();
+
         dataBase = new ConfigDB(this);
 
         configUtils = new UtilConfig(this);
@@ -53,18 +87,5 @@ public final class AimTrainerMain extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ShootHitListener(), this);
         Bukkit.getPluginManager().registerEvents(new InteractListener(), this);
 
-    }
-
-    public UtilConfig getJoinItems() {
-        return configUtils;
-    }
-
-
-    public ArenaHandler getArenaHandler() {
-        return arenaHandler;
-    }
-
-    public static DataBase getDataBase() {
-        return dataBase;
     }
 }
