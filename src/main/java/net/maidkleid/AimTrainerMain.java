@@ -63,8 +63,8 @@ public final class AimTrainerMain extends JavaPlugin {
 
         for (String w : allWeaponNames) {
             assert weapons != null;
-            if (weapons.contains(w)) weapons.set(w, false);
-            if (weapons.getBoolean(w)) allWeaponNames.add(w);
+            if (!weapons.contains(w)) weapons.set(w, false);
+            if (weapons.getBoolean(w)) allActivatedWeapons.add(w);
         }
         saveConfig();
 
