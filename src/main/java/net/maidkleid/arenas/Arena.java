@@ -60,6 +60,7 @@ public class Arena {
     protected Game endGame() {
         Player p = p();
         p.sendMessage(Messages.DE.endGame(currentGame));
+        p.teleport(box.world.getSpawnLocation());
         main.getLogger().info(p.getName() + " has end his game: " + name + " score: " + currentGame.score().get() + "\n Das Spiel ging: " + stopTime().toMillis() / 1000 + " sekunden lang!");
         Bukkit.getScheduler().cancelTask(spawnScheduler);
 
