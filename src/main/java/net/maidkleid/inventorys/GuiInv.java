@@ -182,16 +182,21 @@ public abstract class GuiInv extends InvHandler.Inv {
         return false;
     }
 
+    private static void doEvent(InventoryClickEvent clickEvent, @Nullable InventoryClickExecutor inventoryClickExecutor) {
+        if (inventoryClickExecutor != null) {
+            InventoryClickExecutor.Reaction r = inventoryClickExecutor.execute(clickEvent);
+            if (r != null) r.execute(clickEvent.getWhoClicked());
+        }
+    }
+
     private boolean onClickEvent(InventoryClickEvent clickEvent) {
         int slot = clickEvent.getSlot();
         checkSlotForEvent(clickEvent, slot);
         ItemStack item = inv.getItem(slot);
         if (item == null) return true;
         ItemStack clickedItem = Objects.requireNonNull(item).asOne();
-        InventoryClickExecutor inventoryClickExecutor = stackEventMap.get(clickedItem);
-        if (inventoryClickExecutor != null) inventoryClickExecutor.execute(clickEvent);
-        InventoryClickExecutor inventoryClickExecutor1 = keyValueEventMap.get(getItemStackUniversalNameSpaceEvent(clickedItem));
-        if (inventoryClickExecutor1 != null) inventoryClickExecutor1.execute(clickEvent);
+        doEvent(clickEvent, stackEventMap.get(clickedItem));
+        doEvent(clickEvent, keyValueEventMap.get(getItemStackUniversalNameSpaceEvent(clickedItem)));
         return true;
     }
 

@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.maidkleid.AimTrainerMain;
 import net.maidkleid.arenas.Difficulty;
 import net.maidkleid.data.PlayerData;
+import net.maidkleid.utils.Messages;
 import net.maidkleid.weaponapi.utils.WeaponItemMidLevelUtils;
 import net.maidkleid.weapons.WeaponTable;
 import org.bukkit.ChatColor;
@@ -31,6 +32,7 @@ public class GameConfig extends GuiInv {
             if (whoClicked.hasPermission("aimtrainer.admin.weaponselector"))
                 whoClicked.openInventory(WeaponSelector.getAdminMenu().getInventory());
             else whoClicked.openInventory(WeaponSelector.get().getInventory());
+            return InventoryClickExecutor.defaultReaction;
         });
     }
 
@@ -42,13 +44,15 @@ public class GameConfig extends GuiInv {
         buildInventory();
     }
 
-    private static void changeDifficulty(InventoryClickEvent clickEvent) {
-        if (!(clickEvent.getClickedInventory().getHolder() instanceof GameConfig gameConfig)) return;
+    private static InventoryClickExecutor.Reaction changeDifficulty(InventoryClickEvent clickEvent) {
+        if (!(clickEvent.getClickedInventory().getHolder() instanceof GameConfig gameConfig))
+            return InventoryClickExecutor.defaultReaction;
+        ;
         if (clickEvent.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
             if (gameConfig.data.getDifficulty() instanceof Difficulty.Defaults)
                 gameConfig.data.setDifficulty(new Difficulty.CustomDifficulty(20, 10));
             else gameConfig.data.setDifficulty(Difficulty.Defaults.EASY);
-            return;
+            return changeDifficultyReaction(gameConfig.data);
         }
         Difficulty.Defaults d = Difficulty.Defaults.NORMAL;
         if (gameConfig.data.getDifficulty() instanceof Difficulty.Defaults defaults) {
@@ -60,6 +64,11 @@ public class GameConfig extends GuiInv {
         gameConfig.data.setDifficulty(d);
         gameConfig.data.save();
         gameConfig.setDifficultyItem();
+        return changeDifficultyReaction(gameConfig.data);
+    }
+
+    private static InventoryClickExecutor.Reaction changeDifficultyReaction(PlayerData data) {
+        return InventoryClickExecutor.defaultReaction(Messages.DE.setGameDifficulty(data.getDifficulty()));
     }
 
     public ItemStack getDifficultyItem() {

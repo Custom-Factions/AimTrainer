@@ -1,15 +1,7 @@
 package net.maidkleid.commands;
 
-import net.maidkleid.AimTrainerMain;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
-public class setMaxAllaySpawnCommand implements CommandExecutor {
-
+public class setMaxAllaySpawnCommand /*implements CommandExecutor*/ {
+    /*
     private final AimTrainerMain main;
     public setMaxAllaySpawnCommand(AimTrainerMain main) {
         this.main = main;
@@ -54,5 +46,5 @@ public class setMaxAllaySpawnCommand implements CommandExecutor {
 
 
         return false;
-    }
+    }*/
 }

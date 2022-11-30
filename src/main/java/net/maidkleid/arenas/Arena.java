@@ -46,7 +46,7 @@ public class Arena {
         currentGame = Game.newGame(this, AimTrainerMain.getDataBase().getData(uuid));
         player.teleport(spawnLocation);
         player.sendMessage(Messages.DE.teleport());
-
+        player.sendMessage(Messages.DE.startGame(currentGame));
         spawnScheduler = Bukkit.getScheduler().scheduleSyncRepeatingTask(main, this::checkAllays, currentGame.difficulty().spawnRate(), currentGame.difficulty().spawnRate());
         //ItemStack pistol = WeaponItemMidLevelUtils.getWeaponItem(WeaponProvider.getWeaponID(WeaponProvider.PISTOL.getName()), 1);
         //int weaponID = WeaponTable.AK47_ID;
@@ -59,6 +59,8 @@ public class Arena {
 
     protected Game endGame() {
         Player p = p();
+        p.sendMessage(Messages.DE.endGame(currentGame));
+        p.teleport(box.world.getSpawnLocation());
         main.getLogger().info(p.getName() + " has end his game: " + name + " score: " + currentGame.score().get() + "\n Das Spiel ging: " + stopTime().toMillis() / 1000 + " sekunden lang!");
         Bukkit.getScheduler().cancelTask(spawnScheduler);
 

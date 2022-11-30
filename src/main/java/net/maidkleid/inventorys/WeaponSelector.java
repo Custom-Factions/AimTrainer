@@ -2,6 +2,7 @@ package net.maidkleid.inventorys;
 
 import net.maidkleid.AimTrainerMain;
 import net.maidkleid.data.PlayerData;
+import net.maidkleid.utils.Messages;
 import net.maidkleid.weaponapi.utils.WeaponItemMidLevelUtils;
 import net.maidkleid.weapons.WeaponTable;
 import org.bukkit.entity.Player;
@@ -39,6 +40,7 @@ public class WeaponSelector extends GuiInv {
             data.setWeaponName(w);
             data.save();
             p.openInventory(new GameConfig(p).inv);
+            return InventoryClickExecutor.defaultReaction(Messages.DE.setWeapon(w));
         });
 
         return stack;

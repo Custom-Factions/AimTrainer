@@ -78,5 +78,13 @@ public interface Difficulty {
             map.put("maxSpawns", maxSpawns);
             return map;
         }
+
+        @Override
+        public String toString() {
+            return "CustomDifficulty{" +
+                    "spawnRate=" + spawnRate +
+                    ", maxSpawns=" + maxSpawns +
+                    '}';
+        }
     }
 }
