@@ -4,8 +4,3 @@ main: net.maidkleid.AimTrainerMain
 api-version: 1.19
 authors: [ ImiZocktTv, FlippErZzDEV ]
 description: A little AimTrainer for WepaonAPI
-commands:
-  aimtrainer:
-    description: Tp to Arena
-  allayspawn:
-    description: change allayspawn

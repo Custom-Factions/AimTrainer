@@ -1,6 +1,11 @@
 package net.maidkleid.utils;
 
+import net.kyori.adventure.text.Component;
+import net.maidkleid.arenas.Difficulty;
+import net.maidkleid.arenas.Game;
 import org.bukkit.ChatColor;
+
+;
 
 public interface Messages {
     String PREFIX = "§7[§bAim§9Trainer§7] ";
@@ -8,31 +13,53 @@ public interface Messages {
     String PURE_PREFIX = "AimTrainer";
     Messages DE = new Messages() {
         @Override
-        public String noPermission() {
+        public Component noPermission() {
             return pF("Dazu hast du keine berechtigung");
         }
 
         @Override
-        public String onlyPlayer() {
+        public Component onlyPlayer() {
             return pF("Du musst ein Spieler sein!");
         }
 
         @Override
-        public String teleport() {
+        public Component teleport() {
             return fP("Du wurdest Teleportiert!");
         }
 
         @Override
-        public String noArenaFree() {
+        public Component noArenaFree() {
             return pF("Keine Arena mehr Frei!");
         }
+
+        @Override
+        public Component startGame(Game game) {
+            return fP("Du hast eine Runde gestartet!\n" +
+                    "Deine Waffe: " + game.weapon() + "\n" +
+                    "Difficulty: " + game.difficulty());
+        }
+
+        @Override
+        public Component endGame(Game game) {
+            return fP("Die Runde ist zuende!\n" +
+                    "Dein Score:" + game.score().get());
+        }
+
+        @Override
+        public Component setGameDifficulty(Difficulty difficulty) {
+            return fP("Ändere Schwierigkeit zu " + difficulty);
+        }
+
+        @Override
+        public Component setWeapon(String weapon) {
+            return fP("Ändere Waffe zu " + weapon);
+        }
+
+        @Override
+        public Component arenaCloseByHandler() {
+            return Messages.pF("die Arena wurde vom \"ArenaHandler\" geschlossen!"); // "Arena was closed by ArenaHandler"
+        }
     };
-
-    String noPermission();
-
-    String onlyPlayer();
-
-    String teleport();
 
     /**
      * Format prefix
@@ -40,8 +67,8 @@ public interface Messages {
      * @param string
      * @return
      */
-    static String fP(String string) {
-        return PREFIX + ChatColor.WHITE + string;
+    static Component fP(String string) {
+        return Component.text(PREFIX + ChatColor.WHITE + string);
     }
 
     /**
@@ -50,9 +77,25 @@ public interface Messages {
      * @param string
      * @return
      */
-    static String pF(String string) {
-        return PURE_PREFIX + ChatColor.DARK_RED + string;
+    static Component pF(String string) {
+        return Component.text(PURE_PREFIX + ChatColor.DARK_RED + string);
     }
 
-    String noArenaFree();
+    Component noPermission();
+
+    Component onlyPlayer();
+
+    Component teleport();
+
+    Component noArenaFree();
+
+    Component startGame(Game game);
+
+    Component endGame(Game game);
+
+    Component setGameDifficulty(Difficulty difficulty);
+
+    Component setWeapon(String weapon);
+
+    Component arenaCloseByHandler();
 }

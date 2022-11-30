@@ -23,10 +23,10 @@ public class GameSelector extends GuiInv {
         GuiInv.writeLockUniversalByNameSpace(startButton);
         GuiInv.writeItemStackUniversalNameSpaceEvent(startButton, "startButton", event -> {
             //System.out.println("start-Button");
-            if (!(event.getWhoClicked() instanceof Player player)) return;
+            if (!(event.getWhoClicked() instanceof Player player)) return null;
             //player.sendMessage("start-Button");
             AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().joinArena(player);
-
+            return InventoryClickExecutor.defaultReaction;
         });
         startButton.editMeta(itemMeta -> itemMeta.displayName(Component.text("§2Start-Button")));
         GuiInv.writeLockUniversalByNameSpace(startButton);
@@ -35,9 +35,10 @@ public class GameSelector extends GuiInv {
         endButton = new ItemStack(Material.RED_DYE);
         GuiInv.writeItemStackUniversalNameSpaceEvent(endButton, "stopButton", event -> {
             //System.out.println("stop-Button");
-            if (!(event.getWhoClicked() instanceof Player player)) return;
+            if (!(event.getWhoClicked() instanceof Player player)) return null;
             //player.sendMessage("stop-Button");
             AimTrainerMain.getPlugin(AimTrainerMain.class).getArenaHandler().leaveArena(player.getUniqueId());
+            return InventoryClickExecutor.defaultReaction;
         });
 
         GuiInv.writeLockUniversalByNameSpace(endButton);
@@ -46,8 +47,9 @@ public class GameSelector extends GuiInv {
         //SETTINGS_BUTTON
         settingsButton = new ItemStack(Material.COMMAND_BLOCK);
         GuiInv.writeItemStackUniversalNameSpaceEvent(settingsButton, "settingButton", event -> {
-            if (!(event.getWhoClicked() instanceof Player player)) return;
+            if (!(event.getWhoClicked() instanceof Player player)) return null;
             player.openInventory(new GameConfig(player).inv);
+            return InventoryClickExecutor.defaultReaction;
         });
         GuiInv.writeLockUniversalByNameSpace(settingsButton);
         settingsButton.editMeta(itemMeta -> itemMeta.displayName(Component.text("§4Settings")));
@@ -67,6 +69,7 @@ public class GameSelector extends GuiInv {
         addLockedItem(scoreButton);
         addEventToItem(scoreButton, event -> {
             owningPlayer.playSound(owningPlayer, Sound.ENTITY_CAT_HURT, 1, 1);
+            return InventoryClickExecutor.defaultReaction;
         });
         setItem(10, startButton);
         setItem(16, endButton);

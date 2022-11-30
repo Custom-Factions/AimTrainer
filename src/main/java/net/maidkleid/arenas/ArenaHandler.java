@@ -1,6 +1,7 @@
 package net.maidkleid.arenas;
 
 import net.maidkleid.AimTrainerMain;
+import net.maidkleid.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -49,7 +50,7 @@ public class ArenaHandler {
         if (!freeArenas.contains(arena)) {
             Player player = arena.p();
             playerArenaHandler.remove(player.getUniqueId());
-            player.sendMessage("Arena was closed by ArenaHandler");
+            player.sendMessage(Messages.DE.arenaCloseByHandler());
             arena.endGame();
         }
         arenaList.remove(arena);
