@@ -4,3 +4,9 @@ main: net.maidkleid.AimTrainerMain
 api-version: 1.19
 authors: [ ImiZocktTv, FlippErZzDEV ]
 description: A little AimTrainer for WepaonAPI
+commands:
+  currentGames:
+    aliases:
+      - cg
+    description: "Display CurrentGames"
+    permission: "aimtrainer.admin.currentgames"

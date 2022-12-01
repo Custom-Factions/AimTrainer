@@ -10,10 +10,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class ArenaHandler {
 
@@ -103,5 +100,17 @@ public class ArenaHandler {
                 ", freeArenas=" + freeArenas +
                 ", arenaList=" + arenaList +
                 '}';
+    }
+
+    public List<Game> getCurrentGames() {
+        ArrayList<Game> games = new ArrayList<>();
+        playerArenaHandler.forEach((uuid, arena) -> games.add(arena.currentGame()));
+        return List.copyOf(games);
+    }
+
+    public List<String> getFreeArenas() {
+        String[] arenas = new String[freeArenas.size()];
+        for (int i = 0; i < freeArenas.size(); i++) arenas[i] = freeArenas.get(i).getName();
+        return List.of(arenas);
     }
 }

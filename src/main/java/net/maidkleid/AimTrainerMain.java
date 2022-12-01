@@ -2,6 +2,7 @@ package net.maidkleid;
 
 import net.maidkleid.arenas.ArenaHandler;
 import net.maidkleid.arenas.Difficulty;
+import net.maidkleid.commands.CurrentGamesCommand;
 import net.maidkleid.data.ConfigDB;
 import net.maidkleid.data.DataBase;
 import net.maidkleid.data.PlayerData;
@@ -74,6 +75,7 @@ public final class AimTrainerMain extends JavaPlugin {
 
 
         //commands
+        getCommand("currentGames").setExecutor(new CurrentGamesCommand(this));
         //getCommand("aimtrainer").setExecutor(new TeleportSpawnCommand(this));
         //getCommand("allayspawn").setExecutor(new setMaxAllaySpawnCommand(this));
 

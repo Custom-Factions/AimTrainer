@@ -135,4 +135,8 @@ public class Arena {
     public String getName() {
         return name;
     }
+
+    Game currentGame() {
+        return currentGame;
+    }
 }
